@@ -1,0 +1,25 @@
+# Ignore Unity folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Ignore Visual Studio files
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# Ignore additional file types
+*.apk
+*.aab
+*.db
+*.DS_Store
+*.unitypackage
