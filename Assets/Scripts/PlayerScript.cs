@@ -3,63 +3,89 @@ using UnityEngine;
 public class FirstPersonMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float moveSpeed = 5f; //variable are written in 'camelCase' 
-    public float MAX_WALK_SPEED = 0; // constants are written in 'UPPERCASE_SNAKE_CASE'
+    public float moveSpeed = 5f;
+    public float jumpForce = 5f;
 
     [Header("Mouse Look Settings")]
-    public float mouseSensitivity = 1000f;
+    public float mouseSensitivity = 100f;
+
+    [Header("Ground Check Settings")]
+    public float groundDistance = 1.2f;
+    public LayerMask groundMask;
 
     private float xRotation = 0f;
     private Rigidbody rb;
-
     private Transform playerCamera;
+    private bool isGrounded;
 
+    /** 
+     * Initializes essential components and locks the cursor.
+     * Inputs: None
+     * Actions: Sets up the camera, Rigidbody, and cursor state.
+     * Outputs: None
+     */
     void Start()
     {
-        // Find the camera attached to the player
         playerCamera = GetComponentInChildren<Camera>().transform;
-
-        // Lock the cursor to the center of the screen
+        rb = GetComponent<Rigidbody>();
+        if (rb) rb.freezeRotation = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        // Get the Rigidbody component
-        rb = GetComponent<Rigidbody>();
-        if (rb)
-            rb.freezeRotation = true; // Prevent unwanted rotation
     }
 
     void Update()
     {
-        HandleMovement();
-        HandleMouseLook();
+        HandleMovement();   // Calls the movement handler
+        HandleMouseLook();  // Calls the mouse look handler
+        HandleJumping();    // Calls the jumping handler
     }
-void HandleMovement()
+
+    /** 
+     * Handles player movement based on input.
+     * Inputs: Horizontal and Vertical input axes.
+     * Actions: Moves the Rigidbody in the direction relative to player orientation.
+     * Outputs: None
+     */
+    void HandleMovement()
     {
-        // Get input for movement
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
-
-        // Calculate movement direction relative to the player's orientation
         Vector3 move = transform.right * moveX + transform.forward * moveZ;
-
-        // Apply movement
         rb.MovePosition(rb.position + move * moveSpeed * Time.deltaTime);
     }
 
+    /** 
+     * Handles camera and player rotation.
+     * Inputs: Mouse X and Y input axes.
+     * Actions: Rotates the camera vertically and the player horizontally.
+     * Outputs: None
+     */
     void HandleMouseLook()
     {
-        // Get mouse input
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        // Rotate the camera vertically
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
-        playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f); // Vertical rotation
-
-        // Rotate the player horizontally
+        playerCamera.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
+    }
+
+    /** 
+     * Handles jumping logic using a raycast for ground detection.
+     * Inputs: Jump button and raycast ground detection.
+     * Actions: Casts a ray downward to check if the player is grounded, and applies upward force when jumping.
+     * Outputs: None
+     */
+    void HandleJumping()
+    {
+        RaycastHit hit;
+        Debug.DrawRay(transform.position + Vector3.up * 0.1f, Vector3.down * groundDistance, Color.red);
+        isGrounded = Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, out hit, groundDistance, groundMask);
+
+        if (isGrounded && Input.GetButtonDown("Jump"))
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
 }
