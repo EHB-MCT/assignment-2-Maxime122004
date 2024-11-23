@@ -7,7 +7,7 @@ public class FirstPersonMovement : MonoBehaviour
     public float MAX_WALK_SPEED = 0; // constants are written in 'UPPERCASE_SNAKE_CASE'
 
     [Header("Mouse Look Settings")]
-    public float mouseSensitivity = 100f;
+    public float mouseSensitivity = 1000f;
 
     private float xRotation = 0f;
     private Rigidbody rb;
