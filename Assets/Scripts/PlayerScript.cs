@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FirstPersonMovement : MonoBehaviour
 {
@@ -13,10 +15,14 @@ public class FirstPersonMovement : MonoBehaviour
     public float groundDistance = 1.2f;
     public LayerMask groundMask;
 
+    [Header("Finish Line Settings")]
+    public Text finishText;
+
     private float xRotation = 0f;
     private Rigidbody rb;
     private Transform playerCamera;
     private bool isGrounded;
+
 
     /** 
      * Initializes essential components and locks the cursor.
@@ -31,6 +37,8 @@ public class FirstPersonMovement : MonoBehaviour
         if (rb) rb.freezeRotation = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        finishText.gameObject.SetActive(false);
     }
 
     void Update()
@@ -86,6 +94,20 @@ public class FirstPersonMovement : MonoBehaviour
         if (isGrounded && Input.GetButtonDown("Jump"))
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+
+    /** 
+     * Detects collisions with the finish pole and updates UI.
+    * Inputs: Collision with the finish pole.
+    * Actions: Activates the finish text on collision.
+    * Outputs: None
+    */
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name == "Finish")
+        {
+            finishText.gameObject.SetActive(true);
         }
     }
 }
