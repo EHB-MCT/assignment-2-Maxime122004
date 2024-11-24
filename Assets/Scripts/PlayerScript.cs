@@ -18,6 +18,8 @@ public class FirstPersonMovement : MonoBehaviour
     [Header("Finish Line Settings")]
     public Text finishText;
 
+    private int jumpAmount = 0;
+
     private float xRotation = 0f;
     private Rigidbody rb;
     private Transform playerCamera;
@@ -94,6 +96,9 @@ public class FirstPersonMovement : MonoBehaviour
         if (isGrounded && Input.GetButtonDown("Jump"))
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            jumpAmount++;
+            Debug.Log(jumpAmount);
+            AnalyticsScript.Instance.JumpAmount(jumpAmount);
         }
     }
 
