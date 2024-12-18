@@ -25,6 +25,7 @@ public class FirstPersonMovement : MonoBehaviour
     private Transform playerCamera;
     private bool isGrounded;
 
+    public Stopwatch stopwatch;
 
     /** 
      * Initializes essential components and locks the cursor.
@@ -114,6 +115,7 @@ public class FirstPersonMovement : MonoBehaviour
     {
         if (other.gameObject.name == "Finish")
         {
+            stopwatch.StopTimer();
             finishText.gameObject.SetActive(true);
         }
     }

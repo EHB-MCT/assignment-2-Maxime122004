@@ -41,6 +41,7 @@ Unity Analytics is used to record and monitor custom events. The player’s jump
 ## References
 - **Unity Analytics Implementation**: Video tutorial by Code Monkey
 - **Code Assistance**: ChatGPT was used to help debug and refine the code during development.^[ChatGPT conversation](https://chatgpt.com/share/67434de9-c530-8007-9322-1a3c632d0040)
+- **Stopwatch Implementation**: [Video tutorial](https://youtu.be/b1ONIoDfUes?si=D8reLyBQeEi6FeNz)
 
 ## Attribution & License
 This project is developed by **Maxime Bastien**.
