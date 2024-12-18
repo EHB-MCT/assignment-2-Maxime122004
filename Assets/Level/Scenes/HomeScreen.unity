@@ -428,7 +428,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cecc48e65978354dba37e051d57c9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: {fileID: 1149892957}
+  Name: {fileID: 1882941399}
+  ScoreboardName: {fileID: 1149892957}
+  nameScoreboard: {fileID: 1721090856}
+  timeScore: {fileID: 1778497170}
+  respawnScore: {fileID: 1795111986}
+  jumpScore: {fileID: 352771286}
 --- !u!4 &315283393
 Transform:
   m_ObjectHideFlags: 0
@@ -553,7 +558,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 292, y: 0}
+  m_AnchoredPosition: {x: 268, y: 0}
   m_SizeDelta: {x: 368.90002, y: 50.293976}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &352771286
@@ -844,8 +849,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 315283392}
         m_TargetAssemblyTypeName: FirebaseManager, Assembly-CSharp
-        m_MethodName: CreateUser
-        m_Mode: 5
+        m_MethodName: GetUserData
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1245,8 +1250,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 315283392}
         m_TargetAssemblyTypeName: FirebaseManager, Assembly-CSharp
-        m_MethodName: GetUser
-        m_Mode: 5
+        m_MethodName: CreateUser
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3068,7 +3073,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 292, y: 0}
+  m_AnchoredPosition: {x: 268, y: 0}
   m_SizeDelta: {x: 368.90002, y: 50.293976}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1778497170
@@ -3154,7 +3159,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 220.96375, w: 14.257233}
+  m_margin: {x: -194.66656, y: 0, z: 220.96375, w: 14.257233}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3202,7 +3207,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 292, y: 0}
+  m_AnchoredPosition: {x: 268, y: 0}
   m_SizeDelta: {x: 368.90002, y: 50.293976}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1795111986

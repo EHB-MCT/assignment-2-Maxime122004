@@ -14,6 +14,13 @@ public class FirebaseManager : MonoBehaviour
 
     private string userID;
     public TMP_InputField Name;
+    public TMP_InputField ScoreboardName;
+
+
+    public TextMeshProUGUI nameScoreboard;
+    public TextMeshProUGUI timeScore;
+    public TextMeshProUGUI respawnScore;
+    public TextMeshProUGUI jumpScore;
 
     private void Awake()
     {
@@ -92,17 +99,19 @@ public class FirebaseManager : MonoBehaviour
         });
     }
 
-    public void CreateUser(string name)
+
+    /** 
+     * Adds userdata to Firebase.
+     */
+    public void CreateUser()
     {
         _databaseReference.Child("users").GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
-                // User does not exist, create a new user
                 User newUser = new User(Name.text);
                 string userJson = JsonUtility.ToJson(newUser);
 
-                // Initial data for the user
                 Dictionary<string, object> userData = new Dictionary<string, object>
                     {
                     { "jumpAmount", 0 },
@@ -129,4 +138,36 @@ public class FirebaseManager : MonoBehaviour
             }
         });
     }
+
+    /** 
+     * Gets userdata to Firebase.
+     */
+    public void GetUserData()
+    {
+        _databaseReference.Child("users").Child(ScoreboardName.text).Child("data").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                DataSnapshot dataSnapshot = task.Result;
+
+                if (dataSnapshot.Exists)
+                {
+                    var username = ScoreboardName.text;
+                    var jumpAmount = dataSnapshot.Child("jumpAmount").Value;
+                    var respawnAmount = dataSnapshot.Child("respawnAmount").Value;
+                    var time = dataSnapshot.Child("time").Value;
+
+                    nameScoreboard.text = username.ToString();
+                    timeScore.text = time.ToString();
+                    respawnScore.text = respawnAmount.ToString();
+                    jumpScore.text = jumpAmount.ToString();
+                }
+            }
+            else
+            {
+                nameScoreboard.text = "No User Found";
+            }
+        });
+    }
+
 }
