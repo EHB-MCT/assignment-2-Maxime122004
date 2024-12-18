@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "677171132763",
+    "firebase_url": "https://dev5-39888-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "dev5-39888",
+    "storage_bucket": "dev5-39888.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677171132763:android:45dc5eaa2d902164b7827e",
+        "android_client_info": {
+          "package_name": "com.dev5.firebasedb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWxnVzhXWYlNlDMqS2C7pe21KcSUUZJjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

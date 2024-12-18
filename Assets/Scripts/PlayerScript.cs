@@ -98,6 +98,8 @@ public class FirstPersonMovement : MonoBehaviour
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             jumpAmount++;
             Debug.Log(jumpAmount);
+
+            FirebaseManager.Instance.SaveData("jumpAmount", jumpAmount);
             AnalyticsScript.Instance.JumpAmount(jumpAmount);
         }
     }
