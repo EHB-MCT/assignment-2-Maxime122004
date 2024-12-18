@@ -121,6 +121,7 @@ public class FirstPersonMovement : MonoBehaviour
         {
             stopwatch.StopTimer();
             finishText.gameObject.SetActive(true);
+            FirebaseManager.Instance.GetData("jumpAmount");
         }
 
         if (other.gameObject.name == "Respawner")
