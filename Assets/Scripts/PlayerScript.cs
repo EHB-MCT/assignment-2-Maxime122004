@@ -24,6 +24,9 @@ public class FirstPersonMovement : MonoBehaviour
     private Rigidbody rb;
     private Transform playerCamera;
     private bool isGrounded;
+    
+    [SerializeField] Transform spawnpoint;
+    private int respawnAmount = 0;
 
     public Stopwatch stopwatch;
 
@@ -42,6 +45,7 @@ public class FirstPersonMovement : MonoBehaviour
         Cursor.visible = false;
 
         finishText.gameObject.SetActive(false);
+        spawnpoint = GameObject.Find("Spawnpoint").GetComponent<Transform>();
     }
 
     void Update()
@@ -117,6 +121,13 @@ public class FirstPersonMovement : MonoBehaviour
         {
             stopwatch.StopTimer();
             finishText.gameObject.SetActive(true);
+        }
+
+        if (other.gameObject.name == "Respawner")
+        {
+            gameObject.transform.position = new Vector3(spawnpoint.position.x, spawnpoint.position.y + 2f, spawnpoint.position.z);
+            respawnAmount++;
+            FirebaseManager.Instance.SaveData("respawnAmount", respawnAmount);
         }
     }
 }
