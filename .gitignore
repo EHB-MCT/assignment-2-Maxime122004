@@ -16,6 +16,8 @@
 *.pidb
 *.booproj
 *.svd
+*.bundle
+*.so
 
 # Ignore additional file types
 *.apk
