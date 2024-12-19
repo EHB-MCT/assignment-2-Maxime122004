@@ -100,6 +100,29 @@ public class FirebaseManager : MonoBehaviour
     }
 
 
+    public void SaveUserData(string time, int jumpAmount, int respawnAmount)
+    {
+        Dictionary<string, object> userData = new Dictionary<string, object>
+                    {
+                    { "jumpAmount", jumpAmount },
+                    { "respawnAmount", respawnAmount },
+                    { "time", time }
+                    };
+
+        _databaseReference.Child("users").Child(Name.text).Child("data").SetValueAsync(userData).ContinueWithOnMainThread(setTask =>
+        {
+            if (setTask.IsCompleted)
+            {
+                Debug.Log("User created successfully.");
+            }
+            else
+            {
+                Debug.LogError("Error creating user: " + setTask.Exception);
+            }
+        });
+    }
+
+
     /** 
      * Adds userdata to Firebase.
      */

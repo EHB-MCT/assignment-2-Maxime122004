@@ -26,7 +26,7 @@ public class Stopwatch : MonoBehaviour
             currentTime += Time.deltaTime;
         }
         time = TimeSpan.FromSeconds(currentTime);
-        timerText.text = "Timer " + time.TotalSeconds.ToString();
+        timerText.text = "Time: " + time.TotalSeconds.ToString();
     }
 
     public void StopTimer()

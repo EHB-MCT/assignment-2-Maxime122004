@@ -118,7 +118,7 @@ public class FirstPersonMovement : MonoBehaviour
             jumpAmount++;
             // Debug.Log(jumpAmount);
 
-            FirebaseManager.Instance.SaveData("jumpAmount", jumpAmount);
+            // FirebaseManager.Instance.SaveData("jumpAmount", jumpAmount);
             AnalyticsScript.Instance.JumpAmount(jumpAmount);
         }
     }
@@ -145,7 +145,7 @@ public class FirstPersonMovement : MonoBehaviour
         {
             gameObject.transform.position = new Vector3(spawnpoint.position.x, spawnpoint.position.y + 2f, spawnpoint.position.z);
             respawnAmount++;
-            FirebaseManager.Instance.SaveData("respawnAmount", respawnAmount);
+            // FirebaseManager.Instance.SaveData("respawnAmount", respawnAmount);
         }
     }
 
@@ -157,8 +157,16 @@ public class FirstPersonMovement : MonoBehaviour
         scoreTime.text = stopwatch.time.ToString();
         scoreRespawnAmount.text = respawnAmount.ToString();
         scoreJumpAmount.text = jumpAmount.ToString();
+        FirebaseManager.Instance.SaveUserData(stopwatch.time.ToString(), jumpAmount, respawnAmount);
     }
 
+
+    /** 
+    * Handles Back To Home button at the end of the parkour.
+    * Inputs: None.
+    * Actions: Loads HomeScreen scene.
+    * Outputs: None
+    */
     public void BackToHome()
     {
         SceneManager.LoadSceneAsync("HomeScreen");
