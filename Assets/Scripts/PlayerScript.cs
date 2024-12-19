@@ -1,5 +1,7 @@
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class FirstPersonMovement : MonoBehaviour
@@ -24,11 +26,18 @@ public class FirstPersonMovement : MonoBehaviour
     private Rigidbody rb;
     private Transform playerCamera;
     private bool isGrounded;
-    
+    private bool canMove = false;
+
     [SerializeField] Transform spawnpoint;
     private int respawnAmount = 0;
 
     public Stopwatch stopwatch;
+
+    public GameObject score;
+    public TextMeshProUGUI scoreTime;
+    public TextMeshProUGUI scoreRespawnAmount;
+    public TextMeshProUGUI scoreJumpAmount;
+
 
     /** 
      * Initializes essential components and locks the cursor.
@@ -46,13 +55,18 @@ public class FirstPersonMovement : MonoBehaviour
 
         finishText.gameObject.SetActive(false);
         spawnpoint = GameObject.Find("Spawnpoint").GetComponent<Transform>();
+        score.SetActive(false);
+        canMove = true;
     }
 
     void Update()
     {
-        HandleMovement();   // Calls the movement handler
-        HandleMouseLook();  // Calls the mouse look handler
-        HandleJumping();    // Calls the jumping handler
+        if (canMove)
+        {
+            HandleMovement();   // Calls the movement handler
+            HandleMouseLook();  // Calls the mouse look handler
+            HandleJumping();    // Calls the jumping handler
+        }
     }
 
     /** 
@@ -102,7 +116,7 @@ public class FirstPersonMovement : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             jumpAmount++;
-            Debug.Log(jumpAmount);
+            // Debug.Log(jumpAmount);
 
             FirebaseManager.Instance.SaveData("jumpAmount", jumpAmount);
             AnalyticsScript.Instance.JumpAmount(jumpAmount);
@@ -120,8 +134,11 @@ public class FirstPersonMovement : MonoBehaviour
         if (other.gameObject.name == "Finish")
         {
             stopwatch.StopTimer();
-            finishText.gameObject.SetActive(true);
-            FirebaseManager.Instance.GetData("jumpAmount");
+            canMove = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            ShowScore();
+            // finishText.gameObject.SetActive(true);
         }
 
         if (other.gameObject.name == "Respawner")
@@ -130,5 +147,20 @@ public class FirstPersonMovement : MonoBehaviour
             respawnAmount++;
             FirebaseManager.Instance.SaveData("respawnAmount", respawnAmount);
         }
+    }
+
+    public void ShowScore()
+    {
+        Debug.Log("show scoreboard");
+        score.SetActive(true);
+        Debug.Log("Time: " + stopwatch.time.ToString() + ", RespawnAmount: " + respawnAmount + ", JumpAmount: " + jumpAmount);
+        scoreTime.text = stopwatch.time.ToString();
+        scoreRespawnAmount.text = respawnAmount.ToString();
+        scoreJumpAmount.text = jumpAmount.ToString();
+    }
+
+    public void BackToHome()
+    {
+        SceneManager.LoadSceneAsync("HomeScreen");
     }
 }

@@ -86,7 +86,7 @@ public class FirebaseManager : MonoBehaviour
      */
     public void GetData(string key)
     {
-        _databaseReference.Child(key).GetValueAsync().ContinueWithOnMainThread(task =>
+        _databaseReference.Child(Name.text).Child(key).GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted && task.Result.Value != null)
             {
@@ -140,7 +140,7 @@ public class FirebaseManager : MonoBehaviour
     }
 
     /** 
-     * Gets userdata to Firebase.
+     * Gets userdata from Firebase.
      */
     public void GetUserData()
     {
@@ -162,10 +162,14 @@ public class FirebaseManager : MonoBehaviour
                     respawnScore.text = respawnAmount.ToString();
                     jumpScore.text = jumpAmount.ToString();
                 }
+                else
+                {
+                    nameScoreboard.text = "No User Found";
+                }
             }
             else
             {
-                nameScoreboard.text = "No User Found";
+                Debug.LogError($"Error retrieving data for this user: {task.Exception}");
             }
         });
     }

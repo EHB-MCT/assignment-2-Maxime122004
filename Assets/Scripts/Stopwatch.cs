@@ -11,7 +11,7 @@ public class Stopwatch : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText;
     private float currentTime;
     private bool isPaused;
-    private TimeSpan time;
+    public TimeSpan time;
 
     private void Awake()
     {
@@ -32,7 +32,8 @@ public class Stopwatch : MonoBehaviour
     public void StopTimer()
     {
         isPaused = true;
-        FirebaseManager.Instance.SaveData("time", time.ToString());
+        Debug.Log(time);
+        // FirebaseManager.Instance.SaveData("time", time.ToString());
     }
 
     private void OnTriggerEnter(Collider collider)
