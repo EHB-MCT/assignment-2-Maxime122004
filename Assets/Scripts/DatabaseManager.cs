@@ -41,6 +41,36 @@ public class FirebaseManager : MonoBehaviour
         InitializeFirebase();
     }
 
+    private void Update()
+    {
+
+        ScoreboardName = GameObject.Find("ScoreboardInputField").GetComponent<TMP_InputField>();
+        // if (ScoreboardName != null)
+        // {
+        //     Debug.Log("scoreboardname found");
+        // }
+        // nameScoreboard = GameObject.Find("ScoreboardUserName").GetComponent<TextMeshProUGUI>();
+        // if (nameScoreboard != null)
+        // {
+        //     Debug.Log("nameScoreboard found");
+        // }
+        // timeScore = GameObject.Find("TimeData").GetComponent<TextMeshProUGUI>();
+        // if (timeScore != null)
+        // {
+        //     Debug.Log("timeScore found");
+        // }
+        // respawnScore = GameObject.Find("RespawnData").GetComponent<TextMeshProUGUI>();
+        // if (respawnScore != null)
+        // {
+        //     Debug.Log("respawnScore found");
+        // }
+        // jumpScore = GameObject.Find("JumpData").GetComponent<TextMeshProUGUI>();
+        // if (jumpScore != null)
+        // {
+        //     Debug.Log("jumpScore found");
+        // }
+    }
+
     /** 
      * Initializes Firebase and sets up the database reference.
      */
@@ -188,6 +218,9 @@ public class FirebaseManager : MonoBehaviour
                 else
                 {
                     nameScoreboard.text = "No User Found";
+                    timeScore.text = 0.ToString();
+                    respawnScore.text = 0.ToString();
+                    jumpScore.text = 0.ToString();
                 }
             }
             else
@@ -195,6 +228,38 @@ public class FirebaseManager : MonoBehaviour
                 Debug.LogError($"Error retrieving data for this user: {task.Exception}");
             }
         });
+    }
+
+    public void ResetManager()
+    {
+        ScoreboardName = null;
+        nameScoreboard = null;
+        timeScore = null;
+        respawnScore = null;
+        jumpScore = null;
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "HomeScreen")
+        {
+            Debug.Log("HomeScreen loaded. Initializing UI references.");
+            ScoreboardName = GameObject.Find("ScoreboardInputField").GetComponent<TMP_InputField>();
+            nameScoreboard = GameObject.Find("ScoreboardUserName").GetComponent<TextMeshProUGUI>();
+            timeScore = GameObject.Find("TimeData").GetComponent<TextMeshProUGUI>();
+            respawnScore = GameObject.Find("RespawnData").GetComponent<TextMeshProUGUI>();
+            jumpScore = GameObject.Find("JumpData").GetComponent<TextMeshProUGUI>();
+        }
     }
 
 }

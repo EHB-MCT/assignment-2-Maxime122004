@@ -157,6 +157,7 @@ public class FirstPersonMovement : MonoBehaviour
         scoreTime.text = stopwatch.time.ToString();
         scoreRespawnAmount.text = respawnAmount.ToString();
         scoreJumpAmount.text = jumpAmount.ToString();
+        Debug.Log("save data");
         FirebaseManager.Instance.SaveUserData(stopwatch.time.ToString(), jumpAmount, respawnAmount);
     }
 
@@ -170,5 +171,6 @@ public class FirstPersonMovement : MonoBehaviour
     public void BackToHome()
     {
         SceneManager.LoadSceneAsync("HomeScreen");
+        FirebaseManager.Instance.ResetManager();
     }
 }
