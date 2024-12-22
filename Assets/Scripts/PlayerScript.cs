@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -20,8 +20,6 @@ public class FirstPersonMovement : MonoBehaviour
     [Header("Finish Line Settings")]
     public Text finishText;
 
-    private int jumpAmount = 0;
-
     private float xRotation = 0f;
     private Rigidbody rb;
     private Transform playerCamera;
@@ -29,7 +27,7 @@ public class FirstPersonMovement : MonoBehaviour
     private bool canMove = false;
 
     [SerializeField] Transform spawnpoint;
-    private int respawnAmount = 0;
+    private List<Vector3> deathPositions = new List<Vector3>();
 
     public Stopwatch stopwatch;
 
@@ -115,11 +113,9 @@ public class FirstPersonMovement : MonoBehaviour
         if (isGrounded && Input.GetButtonDown("Jump"))
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            jumpAmount++;
             // Debug.Log(jumpAmount);
 
             // FirebaseManager.Instance.SaveData("jumpAmount", jumpAmount);
-            AnalyticsScript.Instance.JumpAmount(jumpAmount);
         }
     }
 
@@ -138,29 +134,37 @@ public class FirstPersonMovement : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             ShowScore();
-            // finishText.gameObject.SetActive(true);
         }
 
         if (other.gameObject.name == "Respawner")
         {
-            gameObject.transform.position = new Vector3(spawnpoint.position.x, spawnpoint.position.y + 2f, spawnpoint.position.z);
-            respawnAmount++;
-            // FirebaseManager.Instance.SaveData("respawnAmount", respawnAmount);
+            RecordDeathPosition();
+            RespawnPlayer();
         }
+    }
+
+    private void RecordDeathPosition()
+    {
+        deathPositions.Add(transform.position);
+        // Debug.Log(deathPositions.ToString());
+        // Debug.Log("Player died at position: " + transform.position);
+    }
+
+    private void RespawnPlayer()
+    {
+        gameObject.transform.position = new Vector3(spawnpoint.position.x, spawnpoint.position.y + 2f, spawnpoint.position.z);
     }
 
     public void ShowScore()
     {
-        Debug.Log("show scoreboard");
         score.SetActive(true);
-        Debug.Log("Time: " + stopwatch.time.ToString() + ", RespawnAmount: " + respawnAmount + ", JumpAmount: " + jumpAmount);
         scoreTime.text = stopwatch.time.ToString();
-        scoreRespawnAmount.text = respawnAmount.ToString();
-        scoreJumpAmount.text = jumpAmount.ToString();
-        Debug.Log("save data");
-        FirebaseManager.Instance.SaveUserData(stopwatch.time.ToString(), jumpAmount, respawnAmount);
-    }
 
+        float parkourTime = (float)stopwatch.time.TotalSeconds;
+        Debug.Log(parkourTime);
+
+        DatabaseManager.Instance.SaveAllData(parkourTime, deathPositions);
+    }
 
     /** 
     * Handles Back To Home button at the end of the parkour.
@@ -171,6 +175,5 @@ public class FirstPersonMovement : MonoBehaviour
     public void BackToHome()
     {
         SceneManager.LoadSceneAsync("HomeScreen");
-        FirebaseManager.Instance.ResetManager();
     }
 }

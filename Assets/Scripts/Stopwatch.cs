@@ -32,7 +32,7 @@ public class Stopwatch : MonoBehaviour
     public void StopTimer()
     {
         isPaused = true;
-        Debug.Log(time);
+        // Debug.Log(time);
         // FirebaseManager.Instance.SaveData("time", time.ToString());
     }
 

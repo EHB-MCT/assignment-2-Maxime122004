@@ -5,11 +5,10 @@ using Firebase.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
-public class FirebaseManager : MonoBehaviour
+public class DatabaseManager : MonoBehaviour
 {
-    public static FirebaseManager Instance;
+    public static DatabaseManager Instance;
     private DatabaseReference _databaseReference;
 
     private string userID;
@@ -44,7 +43,7 @@ public class FirebaseManager : MonoBehaviour
     private void Update()
     {
 
-        ScoreboardName = GameObject.Find("ScoreboardInputField").GetComponent<TMP_InputField>();
+        // ScoreboardName = GameObject.Find("ScoreboardInputField").GetComponent<TMP_InputField>();
         // if (ScoreboardName != null)
         // {
         //     Debug.Log("scoreboardname found");
@@ -91,6 +90,85 @@ public class FirebaseManager : MonoBehaviour
     }
 
     /** 
+     * Updates the best time for the user if the new time is better.
+     */
+    public void SaveBestTime(float newTime)
+    {
+        string userName = Name.text;
+
+        _databaseReference.Child("users").Child(userName).Child("data").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+
+                if (snapshot.Exists && snapshot.Child("bestTime").Value != null)
+                {
+                    Debug.Log("bestTime not found");
+                    float currentBestTime = float.Parse(snapshot.Child("bestTime").Value.ToString());
+                    Debug.Log(newTime);
+                    Debug.Log(currentBestTime);
+                    if (newTime < currentBestTime)
+                    {
+                        SaveData("bestTime", newTime);
+                        // Debug.Log("New best time saved: " + newTime);
+                    }
+                }
+                else
+                {
+                    Debug.Log("bestTime found");
+                    SaveData("bestTime", newTime);
+                    // Debug.Log("Best time saved: " + newTime);
+                }
+            }
+            else
+            {
+                Debug.LogError($"Error retrieving data: {task.Exception}");
+            }
+
+        });
+    }
+
+    /** 
+    * Tracks the death position of the player and saves it to the database.
+    */
+    public void SaveDeathPosition(Vector3 deathPosition)
+    {
+        string userName = Name.text;
+
+        // string x = deathPosition.x.ToString();
+        // string y = deathPosition.y.ToString();
+        // string z = deathPosition.z.ToString();
+        // string position = x + y + z;
+
+        string position = deathPosition.ToString();
+
+        _databaseReference.Child("users").Child(userName).Child("data").Child("deathPositions").Push().SetValueAsync(position).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Firebase connection successful");
+            }
+            else
+            {
+                Debug.LogError("Firebase connection failed: " + task.Exception);
+            }
+        });
+
+    }
+
+    public void SaveAllData(float newTime, List<Vector3> deathPositions)
+    {
+        SaveBestTime(newTime);
+
+        foreach (Vector3 position in deathPositions)
+        {
+            Debug.Log(position);
+            SaveDeathPosition(position);
+        }
+    }
+
+    /** 
      * Saves data to Firebase.
      * @param key: The key under which the data is saved.
      * @param value: The data to save.
@@ -129,15 +207,13 @@ public class FirebaseManager : MonoBehaviour
         });
     }
 
-
-    public void SaveUserData(string time, int jumpAmount, int respawnAmount)
+    public void SaveUserData(string bestTime, List<Vector3> deathPositions)
     {
         Dictionary<string, object> userData = new Dictionary<string, object>
-                    {
-                    { "jumpAmount", jumpAmount },
-                    { "respawnAmount", respawnAmount },
-                    { "time", time }
-                    };
+        {
+            { "bestTime", bestTime },
+            { "deathPositions", deathPositions }
+        };
 
         _databaseReference.Child("users").Child(Name.text).Child("data").SetValueAsync(userData).ContinueWithOnMainThread(setTask =>
         {
@@ -167,10 +243,11 @@ public class FirebaseManager : MonoBehaviour
 
                 Dictionary<string, object> userData = new Dictionary<string, object>
                     {
-                    { "jumpAmount", 0 },
-                    { "respawnAmount", 0 },
-                    { "time", "00:00:00.0000000" }
+                        { "bestTime", "" },
+                        { "deathPositions", "" }
                     };
+
+
 
                 _databaseReference.Child("users").Child(Name.text).Child("data").SetValueAsync(userData).ContinueWithOnMainThread(setTask =>
                 {
@@ -190,6 +267,11 @@ public class FirebaseManager : MonoBehaviour
                 Debug.LogError("Error checking user existence: " + task.Exception);
             }
         });
+    }
+
+    public void OpenGame()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 
     /** 
@@ -229,37 +311,4 @@ public class FirebaseManager : MonoBehaviour
             }
         });
     }
-
-    public void ResetManager()
-    {
-        ScoreboardName = null;
-        nameScoreboard = null;
-        timeScore = null;
-        respawnScore = null;
-        jumpScore = null;
-    }
-
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.name == "HomeScreen")
-        {
-            Debug.Log("HomeScreen loaded. Initializing UI references.");
-            ScoreboardName = GameObject.Find("ScoreboardInputField").GetComponent<TMP_InputField>();
-            nameScoreboard = GameObject.Find("ScoreboardUserName").GetComponent<TextMeshProUGUI>();
-            timeScore = GameObject.Find("TimeData").GetComponent<TextMeshProUGUI>();
-            respawnScore = GameObject.Find("RespawnData").GetComponent<TextMeshProUGUI>();
-            jumpScore = GameObject.Find("JumpData").GetComponent<TextMeshProUGUI>();
-        }
-    }
-
 }
