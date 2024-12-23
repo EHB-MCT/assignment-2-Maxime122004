@@ -5,6 +5,7 @@ using Firebase.Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class DatabaseManager : MonoBehaviour
 {
@@ -12,8 +13,8 @@ public class DatabaseManager : MonoBehaviour
     private DatabaseReference _databaseReference;
 
     private string userID;
-    public TMP_InputField Name;
-    public TMP_InputField ScoreboardName;
+    private string userName;
+    private string scoreboardName;
 
     public HomescreenManager homescreenManager;
 
@@ -40,31 +41,24 @@ public class DatabaseManager : MonoBehaviour
     private void Update()
     {
 
-        // ScoreboardName = GameObject.Find("ScoreboardInputField").GetComponent<TMP_InputField>();
-        // if (ScoreboardName != null)
-        // {
-        //     Debug.Log("scoreboardname found");
-        // }
-        // nameScoreboard = GameObject.Find("ScoreboardUserName").GetComponent<TextMeshProUGUI>();
-        // if (nameScoreboard != null)
-        // {
-        //     Debug.Log("nameScoreboard found");
-        // }
-        // timeScore = GameObject.Find("TimeData").GetComponent<TextMeshProUGUI>();
-        // if (timeScore != null)
-        // {
-        //     Debug.Log("timeScore found");
-        // }
-        // respawnScore = GameObject.Find("RespawnData").GetComponent<TextMeshProUGUI>();
-        // if (respawnScore != null)
-        // {
-        //     Debug.Log("respawnScore found");
-        // }
-        // jumpScore = GameObject.Find("JumpData").GetComponent<TextMeshProUGUI>();
-        // if (jumpScore != null)
-        // {
-        //     Debug.Log("jumpScore found");
-        // }
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "HomeScreen")
+        {
+            homescreenManager = FindAnyObjectByType<HomescreenManager>();
+        }
     }
 
     /** 
@@ -93,7 +87,9 @@ public class DatabaseManager : MonoBehaviour
      */
     public void SaveData(string key, object value)
     {
-        _databaseReference.Child("users").Child(Name.text).Child("data").Child(key).SetValueAsync(value).ContinueWithOnMainThread(task =>
+        userName = homescreenManager.Name.text;
+
+        _databaseReference.Child("users").Child(userName).Child("data").Child(key).SetValueAsync(value).ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
@@ -112,7 +108,9 @@ public class DatabaseManager : MonoBehaviour
      */
     public void GetData(string key)
     {
-        _databaseReference.Child(Name.text).Child(key).GetValueAsync().ContinueWithOnMainThread(task =>
+        userName = homescreenManager.Name.text;
+
+        _databaseReference.Child(userName).Child(key).GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted && task.Result.Value != null)
             {
@@ -125,14 +123,14 @@ public class DatabaseManager : MonoBehaviour
         });
     }
 
-    
+
 
     /** 
      * Updates the best time for the user if the new time is better.
      */
     public void SaveBestTime(float newTime)
     {
-        string userName = Name.text;
+        userName = homescreenManager.Name.text;
 
         _databaseReference.Child("users").Child(userName).Child("data").GetValueAsync().ContinueWithOnMainThread(task =>
         {
@@ -142,7 +140,6 @@ public class DatabaseManager : MonoBehaviour
 
                 if (snapshot.Exists && snapshot.Child("bestTime").Value != null)
                 {
-                    Debug.Log("bestTime not found");
                     float currentBestTime = float.Parse(snapshot.Child("bestTime").Value.ToString());
                     Debug.Log(newTime);
                     Debug.Log(currentBestTime);
@@ -154,7 +151,6 @@ public class DatabaseManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("bestTime found");
                     SaveData("bestTime", newTime);
                     // Debug.Log("Best time saved: " + newTime);
                 }
@@ -172,7 +168,7 @@ public class DatabaseManager : MonoBehaviour
     */
     public void SaveDeathPosition(Vector3 deathPosition)
     {
-        string userName = Name.text;
+        userName = homescreenManager.Name.text;
 
         // string x = deathPosition.x.ToString();
         // string y = deathPosition.y.ToString();
@@ -208,13 +204,15 @@ public class DatabaseManager : MonoBehaviour
 
     public void SaveUserData(string bestTime, List<Vector3> deathPositions)
     {
+        userName = homescreenManager.Name.text;
+
         Dictionary<string, object> userData = new Dictionary<string, object>
         {
             { "bestTime", bestTime },
             { "deathPositions", deathPositions }
         };
 
-        _databaseReference.Child("users").Child(Name.text).Child("data").SetValueAsync(userData).ContinueWithOnMainThread(setTask =>
+        _databaseReference.Child("users").Child(userName).Child("data").SetValueAsync(userData).ContinueWithOnMainThread(setTask =>
         {
             if (setTask.IsCompleted)
             {
@@ -233,11 +231,13 @@ public class DatabaseManager : MonoBehaviour
      */
     public void CreateUser()
     {
+        userName = homescreenManager.Name.text;
+
         _databaseReference.Child("users").GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
-                User newUser = new User(Name.text);
+                User newUser = new User(userName);
                 string userJson = JsonUtility.ToJson(newUser);
 
                 Dictionary<string, object> userData = new Dictionary<string, object>
@@ -246,7 +246,7 @@ public class DatabaseManager : MonoBehaviour
                         { "deathPositions", "" }
                     };
 
-                _databaseReference.Child("users").Child(Name.text).Child("data").SetValueAsync(userData).ContinueWithOnMainThread(setTask =>
+                _databaseReference.Child("users").Child(userName).Child("data").SetValueAsync(userData).ContinueWithOnMainThread(setTask =>
                 {
                     if (setTask.IsCompleted)
                     {
@@ -271,7 +271,9 @@ public class DatabaseManager : MonoBehaviour
      */
     public void GetUserData()
     {
-        _databaseReference.Child("users").Child(ScoreboardName.text).Child("data").GetValueAsync().ContinueWithOnMainThread(task =>
+        scoreboardName = homescreenManager.ScoreboardName.text;
+        Debug.Log(scoreboardName);
+        _databaseReference.Child("users").Child(scoreboardName).Child("data").GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
@@ -279,17 +281,17 @@ public class DatabaseManager : MonoBehaviour
 
                 if (dataSnapshot.Exists)
                 {
-                    var username = ScoreboardName.text;
+                    var usernameScoreboard = scoreboardName;
                     var time = dataSnapshot.Child("bestTime").Value;
                     var deathCountData = dataSnapshot.Child("deathPositions");
                     int deathCount = 0;
-                    
+
                     if (deathCountData.Exists && deathCountData.Value is Dictionary<string, object> deathPositions)
                     {
                         deathCount = deathPositions.Count;
                     }
 
-                    homescreenManager.nameScoreboard.text = username.ToString();
+                    homescreenManager.nameScoreboard.text = usernameScoreboard.ToString();
                     homescreenManager.timeScore.text = time.ToString();
                     homescreenManager.deathCountScore.text = deathCount.ToString();
                 }
@@ -305,19 +307,5 @@ public class DatabaseManager : MonoBehaviour
                 Debug.LogError($"Error retrieving data for this user: {task.Exception}");
             }
         });
-    }
-    
-    public void OpenGame()
-    {
-        string userName = Name.text;
-
-        if (userName != "")
-        {
-            SceneManager.LoadScene("SampleScene");
-        }
-        else
-        {
-            Debug.Log("Enter a username first");
-        }
     }
 }
