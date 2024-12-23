@@ -15,11 +15,8 @@ public class DatabaseManager : MonoBehaviour
     public TMP_InputField Name;
     public TMP_InputField ScoreboardName;
 
+    public HomescreenManager homescreenManager;
 
-    public TextMeshProUGUI nameScoreboard;
-    public TextMeshProUGUI timeScore;
-    public TextMeshProUGUI respawnScore;
-    public TextMeshProUGUI jumpScore;
 
     private void Awake()
     {
@@ -88,6 +85,47 @@ public class DatabaseManager : MonoBehaviour
             }
         });
     }
+
+    /** 
+     * Saves data to Firebase.
+     * @param key: The key under which the data is saved.
+     * @param value: The data to save.
+     */
+    public void SaveData(string key, object value)
+    {
+        _databaseReference.Child("users").Child(Name.text).Child("data").Child(key).SetValueAsync(value).ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log($"Data saved successfully: {key} = {value}");
+            }
+            else
+            {
+                Debug.LogError($"Error saving data: {task.Exception}");
+            }
+        });
+    }
+
+    /** 
+     * Reads data from Firebase.
+     * @param key: The key of the data to read.
+     */
+    public void GetData(string key)
+    {
+        _databaseReference.Child(Name.text).Child(key).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted && task.Result.Value != null)
+            {
+                Debug.Log($"Data retrieved: {key} = {task.Result.Value}");
+            }
+            else
+            {
+                Debug.LogWarning($"No data found for key: {key}");
+            }
+        });
+    }
+
+    
 
     /** 
      * Updates the best time for the user if the new time is better.
@@ -168,45 +206,6 @@ public class DatabaseManager : MonoBehaviour
         }
     }
 
-    /** 
-     * Saves data to Firebase.
-     * @param key: The key under which the data is saved.
-     * @param value: The data to save.
-     */
-    public void SaveData(string key, object value)
-    {
-        _databaseReference.Child("users").Child(Name.text).Child("data").Child(key).SetValueAsync(value).ContinueWithOnMainThread(task =>
-        {
-            if (task.IsCompleted)
-            {
-                Debug.Log($"Data saved successfully: {key} = {value}");
-            }
-            else
-            {
-                Debug.LogError($"Error saving data: {task.Exception}");
-            }
-        });
-    }
-
-    /** 
-     * Reads data from Firebase.
-     * @param key: The key of the data to read.
-     */
-    public void GetData(string key)
-    {
-        _databaseReference.Child(Name.text).Child(key).GetValueAsync().ContinueWithOnMainThread(task =>
-        {
-            if (task.IsCompleted && task.Result.Value != null)
-            {
-                Debug.Log($"Data retrieved: {key} = {task.Result.Value}");
-            }
-            else
-            {
-                Debug.LogWarning($"No data found for key: {key}");
-            }
-        });
-    }
-
     public void SaveUserData(string bestTime, List<Vector3> deathPositions)
     {
         Dictionary<string, object> userData = new Dictionary<string, object>
@@ -247,8 +246,6 @@ public class DatabaseManager : MonoBehaviour
                         { "deathPositions", "" }
                     };
 
-
-
                 _databaseReference.Child("users").Child(Name.text).Child("data").SetValueAsync(userData).ContinueWithOnMainThread(setTask =>
                 {
                     if (setTask.IsCompleted)
@@ -269,11 +266,6 @@ public class DatabaseManager : MonoBehaviour
         });
     }
 
-    public void OpenGame()
-    {
-        SceneManager.LoadScene("SampleScene");
-    }
-
     /** 
      * Gets userdata from Firebase.
      */
@@ -288,21 +280,24 @@ public class DatabaseManager : MonoBehaviour
                 if (dataSnapshot.Exists)
                 {
                     var username = ScoreboardName.text;
-                    var jumpAmount = dataSnapshot.Child("jumpAmount").Value;
-                    var respawnAmount = dataSnapshot.Child("respawnAmount").Value;
-                    var time = dataSnapshot.Child("time").Value;
+                    var time = dataSnapshot.Child("bestTime").Value;
+                    var deathCountData = dataSnapshot.Child("deathPositions");
+                    int deathCount = 0;
+                    
+                    if (deathCountData.Exists && deathCountData.Value is Dictionary<string, object> deathPositions)
+                    {
+                        deathCount = deathPositions.Count;
+                    }
 
-                    nameScoreboard.text = username.ToString();
-                    timeScore.text = time.ToString();
-                    respawnScore.text = respawnAmount.ToString();
-                    jumpScore.text = jumpAmount.ToString();
+                    homescreenManager.nameScoreboard.text = username.ToString();
+                    homescreenManager.timeScore.text = time.ToString();
+                    homescreenManager.deathCountScore.text = deathCount.ToString();
                 }
                 else
                 {
-                    nameScoreboard.text = "No User Found";
-                    timeScore.text = 0.ToString();
-                    respawnScore.text = 0.ToString();
-                    jumpScore.text = 0.ToString();
+                    homescreenManager.nameScoreboard.text = "No User Found";
+                    homescreenManager.timeScore.text = 0.ToString();
+                    homescreenManager.deathCountScore.text = 0.ToString();
                 }
             }
             else
@@ -310,5 +305,19 @@ public class DatabaseManager : MonoBehaviour
                 Debug.LogError($"Error retrieving data for this user: {task.Exception}");
             }
         });
+    }
+    
+    public void OpenGame()
+    {
+        string userName = Name.text;
+
+        if (userName != "")
+        {
+            SceneManager.LoadScene("SampleScene");
+        }
+        else
+        {
+            Debug.Log("Enter a username first");
+        }
     }
 }

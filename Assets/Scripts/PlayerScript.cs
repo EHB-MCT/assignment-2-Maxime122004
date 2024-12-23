@@ -28,13 +28,13 @@ public class FirstPersonMovement : MonoBehaviour
 
     [SerializeField] Transform spawnpoint;
     private List<Vector3> deathPositions = new List<Vector3>();
+    private int deathCount = 0;
 
     public Stopwatch stopwatch;
 
     public GameObject score;
     public TextMeshProUGUI scoreTime;
-    public TextMeshProUGUI scoreRespawnAmount;
-    public TextMeshProUGUI scoreJumpAmount;
+    public TextMeshProUGUI scoreDeathCount;
 
 
     /** 
@@ -146,8 +146,7 @@ public class FirstPersonMovement : MonoBehaviour
     private void RecordDeathPosition()
     {
         deathPositions.Add(transform.position);
-        // Debug.Log(deathPositions.ToString());
-        // Debug.Log("Player died at position: " + transform.position);
+        deathCount++;
     }
 
     private void RespawnPlayer()
@@ -159,21 +158,9 @@ public class FirstPersonMovement : MonoBehaviour
     {
         score.SetActive(true);
         scoreTime.text = stopwatch.time.ToString();
+        scoreDeathCount.text = deathCount.ToString();
 
         float parkourTime = (float)stopwatch.time.TotalSeconds;
-        Debug.Log(parkourTime);
-
         DatabaseManager.Instance.SaveAllData(parkourTime, deathPositions);
-    }
-
-    /** 
-    * Handles Back To Home button at the end of the parkour.
-    * Inputs: None.
-    * Actions: Loads HomeScreen scene.
-    * Outputs: None
-    */
-    public void BackToHome()
-    {
-        SceneManager.LoadSceneAsync("HomeScreen");
     }
 }

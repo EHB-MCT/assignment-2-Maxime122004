@@ -375,7 +375,7 @@ GameObject:
   - component: {fileID: 110552198}
   - component: {fileID: 110552197}
   m_Layer: 5
-  m_Name: RespawnAmountTitle
+  m_Name: DeathCountTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1514,10 +1514,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: {fileID: 0}
   ScoreboardName: {fileID: 0}
-  nameScoreboard: {fileID: 0}
-  timeScore: {fileID: 0}
-  respawnScore: {fileID: 0}
-  jumpScore: {fileID: 0}
+  homescreenManager: {fileID: 0}
 --- !u!4 &713198657
 Transform:
   m_ObjectHideFlags: 0
@@ -1638,6 +1635,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 754923394}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &805225370
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 805225372}
+  - component: {fileID: 805225371}
+  m_Layer: 0
+  m_Name: GameSceneManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &805225371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805225370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65be00e32ebdaa64eabad33c5e0519cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &805225372
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805225370}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 569.13293, y: 347.1857, z: -15.7921915}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &842487123
 GameObject:
   m_ObjectHideFlags: 0
@@ -2117,8 +2158,7 @@ MonoBehaviour:
   stopwatch: {fileID: 2140012575}
   score: {fileID: 1464964931}
   scoreTime: {fileID: 1764874957}
-  scoreRespawnAmount: {fileID: 1597535569}
-  scoreJumpAmount: {fileID: 0}
+  scoreDeathCount: {fileID: 1597535569}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -2999,7 +3039,7 @@ GameObject:
   - component: {fileID: 1597535570}
   - component: {fileID: 1597535569}
   m_Layer: 5
-  m_Name: RespawnData
+  m_Name: DeathCountData
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3796,8 +3836,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 961665982}
-        m_TargetAssemblyTypeName: FirstPersonMovement, Assembly-CSharp
+      - m_Target: {fileID: 805225371}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: BackToHome
         m_Mode: 1
         m_Arguments:
@@ -4329,3 +4369,4 @@ SceneRoots:
   - {fileID: 1889611954}
   - {fileID: 2002229928}
   - {fileID: 713198657}
+  - {fileID: 805225372}

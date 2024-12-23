@@ -430,10 +430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: {fileID: 1882941399}
   ScoreboardName: {fileID: 1149892957}
-  nameScoreboard: {fileID: 1721090856}
-  timeScore: {fileID: 1778497170}
-  respawnScore: {fileID: 1795111986}
-  jumpScore: {fileID: 0}
+  homescreenManager: {fileID: 860288466}
 --- !u!4 &315283393
 Transform:
   m_ObjectHideFlags: 0
@@ -1352,8 +1349,7 @@ MonoBehaviour:
   ScoreboardName: {fileID: 1149892957}
   nameScoreboard: {fileID: 1721090856}
   timeScore: {fileID: 1778497170}
-  respawnScore: {fileID: 1795111986}
-  jumpScore: {fileID: 0}
+  deathCountScore: {fileID: 1795111986}
 --- !u!4 &860288467
 Transform:
   m_ObjectHideFlags: 0

@@ -9,8 +9,7 @@ public class HomescreenManager : MonoBehaviour
 
     public TextMeshProUGUI nameScoreboard;
     public TextMeshProUGUI timeScore;
-    public TextMeshProUGUI respawnScore;
-    public TextMeshProUGUI jumpScore;
+    public TextMeshProUGUI deathCountScore;
     
     void Start()
     {
