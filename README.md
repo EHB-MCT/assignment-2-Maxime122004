@@ -1,42 +1,66 @@
-# Unity Race Game Project
+# Parkour Simulator
 ## Project Overview
-This Unity project implements a first-person movement system with jump mechanics and integrates Unity Analytics for tracking player events, such as jump counts. It also includes interactive features like a finish line that displays UI feedback when triggered.
+This Unity project is a parkour simulator where players try to get the best time possible. Players can start a new game or view their statistics on the scoreboard by entering their username. The game tracks player data such as completion times and the positions of where the player died. The data is aggregated through a Firebase database.
 
 ## How to Run
 1. Open the project in Unity (version 2022.1 or later).
 2. Open the `Scenes/Main.unity` scene.
 3. Press "Play" to start the game.
 
-## Features
+## How to Develop
+Follow these steps to contribute to or modify the project:
+### Prerequisites
+ - Unity 2022.1 or later.
+- Basic knowledge of C# and Unity workflows.
+- Firebase account.
+### Development Setup
+1. Clone the [**repository**](https://github.com/EHB-MCT/assignment-2-Maxime122004/tree/feature/firebase-database).
+2. **Scene Navigation**: Work on gameplay on the `Scenes/`
+### Key Development Tasks
+- **Add Parkour Obstacles**:
+   - Create new obstacle prefabs under `Level/Prefabs`.
+   - Add the prefab to the `Scenes/Level.unity` and set up colliders and scripts as necessary.
+- **Modify or Improve Gameplay Mechanics**:
+   - Update player movement and mechanics in the `PlayerMovement` script located in `Assets/Scripts`.
+- **Enhance UI**:
+   - Update home screen or scoreboard UI by editing sprites in the `Assets/Art/Sprites` folder.
+- **Implement New Features**:
+   - Write new Scripts in the `Assets/Scripts` and attach them to relevant GameObjects.
+- **Debugging**:
+   - Use Unity's Play mode and the console to test changes.
+   - Chech Firebase logs for database integration debugging.
+### Testing
+1. **Playtest Changer**:
+   - Run the game in Unity's Play mode to verify changes.
+2. **Verify Firebase Integration**:
+   - Check the Firebase console for new data entries when testing scoreboard functionality.
+
+## Gameplay Features
 - **First-Person Controller**: Smooth movement and mouse-controlled camera.
-- **Jump Mechanics**: Tracks jump counts and records data to Unity Analytics.
-- **Finish Interaction**: A finish pole triggers a UI message when touched.
-- **Unity Analytics Integration**: Tracks and sends custom events to the Unity Analytics dashboard.
+- **Stopwatch**: Tracks the time it takes the player to finish the parkour.
+- **Scoreboard**: Allows players to enter their username and view their stats.
 
 
 ## Folder Structure
 - `Assets/`: All assets such as prefabs, scripts, models, and UI elements.
-  - `Animations`: Contains all animations.
-  - `Art`: Contains fonts, materials, models sprites and textures.
-  - `Audio`: Contains music and sound effects.
+  - `Animations/`: Contains all animations.
+  - `Art/`: Contains fonts, materials, models, sprites and textures.
+  - `Audio/`: Contains music and sound effects.
+  - `DatabaseAssets/`: Contains all Firebase assets.
   - `Level/`: Contains Unity scene files and prefabs.
-  - `Post Processing`: Has post processing profiles used for cameras.
+  - `Shaders/`: Contains Renderer files and post processing.
   - `Scripts/`: Game logic scripts.
-- `Packages`: Contains all packages used in project.
+  - `StreamingAssets/`: Has json file to ensure connection with database.
+- `Packages/`: Contains all Unity packages used in project.
 
 source: [Unity-Folder-Structure](https://unity.com/how-to/organizing-your-project)
 
 ## Key Scripts
-- `FirstPersonMovement`: Manages player movement, camera control, jumping, and finish line interactions.
-- `AnalyticsScript`: Implements Unity Analytics functionality to track custom player events, such as jump counts.
-
-## How Unity Analytics Is Used
-Unity Analytics is used to record and monitor custom events. The player’s jump count is tracked and sent to the analytics dashboard with the event name "jump" and a `jump_index` parameter indicating the current jump count.
-
-### Viewing Analytics Data
-1. Log in to the [Unity Dashboard](https://cloud.unity.com/home/organizations/1374483532186/projects/f280becc-6a37-4842-b207-9507da68ee32/environments/b37097e3-0e87-4859-b56e-391c917411c5/analytics/v2/dashboards/game-performance).
-2. Navigate to Analytics > Events.
-3. Verify that the "jump" event appears along with the jump count data.
+- `PlayerScript`: Manages player movement, camera control, jumping, and finish line interactions.
+- `Stopwatch`: Contains start and stop functions to make a stopwatch for the parkour.
+- `DatabaseManager`: Saves and gets player data in firebase database.
+- `HomescreenManager`: Manages connection for inputfields and text between homescreen and databasemanager.
+- `GameManager`: Contains script to open Homescreen scene for button onClick event.
 
 ## References
 - **Code Assistance**: ChatGPT was used to help debug and refine the code during development.^[ChatGPT conversation](https://chatgpt.com/share/67434de9-c530-8007-9322-1a3c632d0040)
@@ -46,5 +70,4 @@ Unity Analytics is used to record and monitor custom events. The player’s jump
 ## Attribution & License
 This project is developed by **Maxime Bastien**.
 
-All code is MIT licensed. Please review any third-party assets' licenses in the `Assets/` folder for
-proper attribution.
+This project is licensed under the MIT License. See the full license text in the LICENSE.md file.
