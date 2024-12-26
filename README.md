@@ -34,12 +34,13 @@ Follow these steps to contribute to or modify the project:
    - Run the game in Unity's Play mode to verify changes.
 2. **Verify Firebase Integration**:
    - Check the Firebase console for new data entries when testing scoreboard functionality.
+### Additional Contribution
+For any further contribution, please check the `CONTRIBUTING.md`.
 
 ## Gameplay Features
 - **First-Person Controller**: Smooth movement and mouse-controlled camera.
 - **Stopwatch**: Tracks the time it takes the player to finish the parkour.
 - **Scoreboard**: Allows players to enter their username and view their stats.
-
 
 ## Folder Structure
 - `Assets/`: All assets such as prefabs, scripts, models, and UI elements.
@@ -54,6 +55,9 @@ Follow these steps to contribute to or modify the project:
 - `Packages/`: Contains all Unity packages used in project.
 
 source: [Unity-Folder-Structure](https://unity.com/how-to/organizing-your-project)
+
+## Documentation
+All logic concerning conventions, folder structure, data flowchart and database structure are documented in `docs/`.
 
 ## Key Scripts
 - `PlayerScript`: Manages player movement, camera control, jumping, and finish line interactions.
