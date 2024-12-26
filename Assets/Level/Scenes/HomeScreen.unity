@@ -428,8 +428,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cecc48e65978354dba37e051d57c9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Name: {fileID: 1882941399}
-  ScoreboardName: {fileID: 1149892957}
   homescreenManager: {fileID: 860288466}
 --- !u!4 &315283393
 Transform:
@@ -710,9 +708,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 315283392}
-        m_TargetAssemblyTypeName: FirebaseManager, Assembly-CSharp
-        m_MethodName: GetUserData
+      - m_Target: {fileID: 860288466}
+        m_TargetAssemblyTypeName: HomescreenManager, Assembly-CSharp
+        m_MethodName: SearchUser
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1111,8 +1109,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 315283392}
-        m_TargetAssemblyTypeName: DatabaseManager, Assembly-CSharp
+      - m_Target: {fileID: 860288466}
+        m_TargetAssemblyTypeName: HomescreenManager, Assembly-CSharp
         m_MethodName: OpenGame
         m_Mode: 1
         m_Arguments:
@@ -1350,6 +1348,9 @@ MonoBehaviour:
   nameScoreboard: {fileID: 1721090856}
   timeScore: {fileID: 1778497170}
   deathCountScore: {fileID: 1795111986}
+  startButton: {fileID: 654377095}
+  searchButton: {fileID: 487846808}
+  databaseManager: {fileID: 315283392}
 --- !u!4 &860288467
 Transform:
   m_ObjectHideFlags: 0
