@@ -16,7 +16,13 @@ public class HomescreenManager : MonoBehaviour
     public Button startButton;
     public Button searchButton;
     public DatabaseManager databaseManager;
-
+    
+    /**
+     * Assigns GameObject with type DatabaseManager to databaseManager variable.
+     * Inputs: None
+     * Actions: Retrieves GameObject with type DatabaseManager.
+     * Outputs: None
+     */
     void Update()
     {
         if (databaseManager == null)
@@ -24,7 +30,13 @@ public class HomescreenManager : MonoBehaviour
             databaseManager = FindAnyObjectByType<DatabaseManager>();
         }
     }
-    
+
+    /**
+     * Loads Level scene. 
+     * Inputs: None
+     * Actions: Loads Level scene. 
+     * Outputs: None
+     */
     public void OpenGame()
     {
         string userName = Name.text;
@@ -39,6 +51,12 @@ public class HomescreenManager : MonoBehaviour
         }
     }
 
+    /**
+     * Calls the GetUserData() function from the DatabaseManager script.
+     * Inputs: None
+     * Actions:  Calls GetUserData() function. 
+     * Outputs: None
+     */
     public void SearchUser()
     {
         databaseManager.GetUserData();
