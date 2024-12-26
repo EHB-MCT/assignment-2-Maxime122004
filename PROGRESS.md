@@ -47,5 +47,5 @@ This file tracks the development progress of the Prakour Simulator game project,
 **24-12-2024**
 - Readme documentation updated and MIT licence added in LICENSE.md.
 
-**25-12-2024**
-- Contributing.md documentation updated.
+**26-12-2024**
+- Contributing.md, Progress.md and Conventions.md documentation updated.

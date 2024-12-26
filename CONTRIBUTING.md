@@ -24,6 +24,8 @@
    - `feat: [description]` for new features.
    - `fix: [description]` for bug fixes.
    - `chore: [description]` for maintenance tasks.
+   - `refractor: [description]` for clean up or improvements.
+   - `docs: [description]` for markdown files.
 ## Pull Requests
 1. **Coding Conventions**:
    - Ensure your code follows the conventions outlined in `CONVENTIONS.md`.
