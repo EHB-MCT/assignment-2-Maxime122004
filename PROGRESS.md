@@ -49,6 +49,3 @@ This file tracks the development progress of the Prakour Simulator game project,
 
 **25-12-2024**
 - Contributing.md documentation updated.
-
-## Next Steps
-- 

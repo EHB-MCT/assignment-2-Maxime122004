@@ -18,7 +18,12 @@ public class DatabaseManager : MonoBehaviour
 
     public HomescreenManager homescreenManager;
 
-
+    /**
+     * Ensures only one instance of the DatabaseManager exists and persists across scenes.
+     * Inputs: None
+     * Actions: Sets `Instance` to this instance if none exists; otherwise, destroys the duplicate object.
+     * Outputs: None
+     */
     private void Awake()
     {
         if (Instance == null)
@@ -32,6 +37,12 @@ public class DatabaseManager : MonoBehaviour
         }
     }
 
+    /**
+     * Initializes user ID and Firebase setup.
+     * Inputs: None
+     * Actions: Retrieves unique device ID and initializes Firebase.
+     * Outputs: None
+     */
     private void Start()
     {
         userID = SystemInfo.deviceUniqueIdentifier;
@@ -43,16 +54,34 @@ public class DatabaseManager : MonoBehaviour
 
     }
 
+    /**
+     * Subscribes to scene load events when the object is enabled.
+     * Inputs: None
+     * Actions: Adds the `OnSceneLoaded` method to the sceneLoaded event.
+     * Outputs: None
+     */
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    /**
+     * Unsubscribes from scene load events when the object is disabled.
+     * Inputs: None
+     * Actions: Removes the `OnSceneLoaded` method from the sceneLoaded event.
+     * Outputs: None
+     */
     private void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    /**
+     * Handles actions when a new scene is loaded.
+     * Inputs: The loaded scene and its load mode.
+     * Actions: Finds the HomescreenManager instance if the HomeScreen scene is loaded.
+     * Outputs: None
+     */
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene.name == "HomeScreen")
@@ -61,8 +90,11 @@ public class DatabaseManager : MonoBehaviour
         }
     }
 
-    /** 
+    /**
      * Initializes Firebase and sets up the database reference.
+     * Inputs: None
+     * Actions: Checks Firebase dependencies and initializes the database reference.
+     * Outputs: None
      */
     private void InitializeFirebase()
     {
@@ -80,10 +112,11 @@ public class DatabaseManager : MonoBehaviour
         });
     }
 
-    /** 
-     * Saves data to Firebase.
-     * @param key: The key under which the data is saved.
-     * @param value: The data to save.
+    /**
+     * Saves data to Firebase under a specified key.
+     * Inputs: The key and value to store in Firebase.
+     * Actions: Writes the data to Firebase under the user's name.
+     * Outputs: None
      */
     public void SaveData(string key, object value)
     {
@@ -102,9 +135,11 @@ public class DatabaseManager : MonoBehaviour
         });
     }
 
-    /** 
-     * Reads data from Firebase.
-     * @param key: The key of the data to read.
+    /**
+     * Retrieves data from Firebase for a specified key.
+     * Inputs: The key to retrieve from Firebase.
+     * Actions: Reads the data from Firebase and logs it.
+     * Outputs: None
      */
     public void GetData(string key)
     {
@@ -125,8 +160,11 @@ public class DatabaseManager : MonoBehaviour
 
 
 
-    /** 
-     * Updates the best time for the user if the new time is better.
+    /**
+     * Updates the user's best time if the new time is better.
+     * Inputs: The new best time float value.
+     * Actions: Saves the new best time if it is better than the current one.
+     * Outputs: None
      */
     public void SaveBestTime(float newTime)
     {
@@ -163,9 +201,12 @@ public class DatabaseManager : MonoBehaviour
         });
     }
 
-    /** 
-    * Tracks the death position of the player and saves it to the database.
-    */
+    /**
+     * Saves the player's death position to Firebase.
+     * Inputs: A Vector3 representing the death position.
+     * Actions: Writes the position data to Firebase under the user's data.
+     * Outputs: None
+     */
     public void SaveDeathPosition(Vector3 deathPosition)
     {
         userName = homescreenManager.Name.text;
@@ -191,6 +232,12 @@ public class DatabaseManager : MonoBehaviour
 
     }
 
+    /** 
+     * Saves all relevant user data to Firebase.
+     * Inputs: `newTime` (float), the new best time; `deathPositions` (List<Vector3>), the list of death positions.
+     * Actions: Saves the new best time and iterates through death positions to save them.
+     * Outputs: None
+     */
     public void SaveAllData(float newTime, List<Vector3> deathPositions)
     {
         SaveBestTime(newTime);
@@ -202,6 +249,12 @@ public class DatabaseManager : MonoBehaviour
         }
     }
 
+    /** 
+     * Saves the user data to Firebase as a dictionary.
+     * Inputs: `bestTime` (string), the user's best time; `deathPositions` (List<Vector3>), the list of death positions.
+     * Actions: Stores the user data in Firebase as a dictionary.
+     * Outputs: None
+     */
     public void SaveUserData(string bestTime, List<Vector3> deathPositions)
     {
         userName = homescreenManager.Name.text;
@@ -225,9 +278,11 @@ public class DatabaseManager : MonoBehaviour
         });
     }
 
-
     /** 
-     * Adds userdata to Firebase.
+     * Creates a new user in Firebase.
+     * Inputs: None
+     * Actions: Adds a new user entry with default data and transitions to a new scene.
+     * Outputs: None
      */
     public void CreateUser()
     {
@@ -267,7 +322,10 @@ public class DatabaseManager : MonoBehaviour
     }
 
     /** 
-     * Gets userdata from Firebase.
+     * Retrieves user data from Firebase and displays it on the home screen.
+     * Inputs: None
+     * Actions: Fetches user data and updates the home screen's scoreboard fields.
+     * Outputs: None
      */
     public void GetUserData()
     {

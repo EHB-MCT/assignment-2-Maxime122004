@@ -120,11 +120,11 @@ public class FirstPersonMovement : MonoBehaviour
     }
 
     /** 
-     * Detects collisions with the finish pole and updates UI.
-    * Inputs: Collision with the finish pole.
-    * Actions: Activates the finish text on collision.
-    * Outputs: None
-    */
+     * Detects collisions with specific objects and triggers appropriate actions.
+     * Inputs: Collision object from Unity's collision system.
+     * Actions: Ends the game on finish pole collision or respawns player on respawner collision..
+     * Outputs: None
+     */
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "Finish")
@@ -143,18 +143,35 @@ public class FirstPersonMovement : MonoBehaviour
         }
     }
 
+    /** 
+     * Records the player's death position.
+     * Inputs: None
+     * Actions: Adds the player's current position to the death positions list and increments death count.
+     * Outputs: None
+     */
     private void RecordDeathPosition()
     {
         deathPositions.Add(transform.position);
         deathCount++;
     }
 
+    /** 
+     * Respawns the player at the predefined spawn point.
+     * Inputs: None
+     * Actions: Moves the player to the spawn point.
+     * Outputs: None
+     */
     private void RespawnPlayer()
     {
         gameObject.transform.position = new Vector3(spawnpoint.position.x, spawnpoint.position.y + 2f, spawnpoint.position.z);
     }
-
-    public void ShowScore()
+    
+    /** 
+     * Displays the score UI and saves game data.
+     * Inputs: None
+     * Actions: Activates the score UI, updates score text, and saves data via the DatabaseManager.
+     * Outputs: None
+     */    public void ShowScore()
     {
         score.SetActive(true);
         scoreTime.text = stopwatch.time.ToString();
