@@ -37,6 +37,7 @@
    - All pull requests will be reviewed for quality consistency, and adherence to the guidelines before being merged.
 
 ## Additional Notes
+- Every task from the [Trello](https://trello.com/invite/b/6766c1996eee884846f9ff70/ATTI77b2f061cba9f88c0d080a08553a37982E1B4733/dev5-challenge3) that is completed must be moved to done.
 - If you have questions about contributing or are unsure about a change, feel free to open a discussion or issue in the repository.
 - Contributions of all levels are welcome, from small bug fixes to major feature implementations.
 
