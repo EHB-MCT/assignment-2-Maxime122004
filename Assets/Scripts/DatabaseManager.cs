@@ -49,11 +49,6 @@ public class DatabaseManager : MonoBehaviour
         InitializeFirebase();
     }
 
-    private void Update()
-    {
-
-    }
-
     /**
      * Subscribes to scene load events when the object is enabled.
      * Inputs: None
@@ -158,8 +153,6 @@ public class DatabaseManager : MonoBehaviour
         });
     }
 
-
-
     /**
      * Updates the user's best time if the new time is better.
      * Inputs: The new best time float value.
@@ -184,13 +177,11 @@ public class DatabaseManager : MonoBehaviour
                     if (newTime < currentBestTime)
                     {
                         SaveData("bestTime", newTime);
-                        // Debug.Log("New best time saved: " + newTime);
                     }
                 }
                 else
                 {
                     SaveData("bestTime", newTime);
-                    // Debug.Log("Best time saved: " + newTime);
                 }
             }
             else
@@ -210,13 +201,12 @@ public class DatabaseManager : MonoBehaviour
     public void SaveDeathPosition(Vector3 deathPosition)
     {
         userName = homescreenManager.Name.text;
+        string position = deathPosition.ToString();
 
         // string x = deathPosition.x.ToString();
         // string y = deathPosition.y.ToString();
         // string z = deathPosition.z.ToString();
         // string position = x + y + z;
-
-        string position = deathPosition.ToString();
 
         _databaseReference.Child("users").Child(userName).Child("data").Child("deathPositions").Push().SetValueAsync(position).ContinueWithOnMainThread(task =>
         {
@@ -274,49 +264,6 @@ public class DatabaseManager : MonoBehaviour
             else
             {
                 Debug.LogError("Error creating user: " + setTask.Exception);
-            }
-        });
-    }
-
-    /** 
-     * Creates a new user in Firebase.
-     * Inputs: None
-     * Actions: Adds a new user entry with default data and transitions to a new scene.
-     * Outputs: None
-     */
-    public void CreateUser()
-    {
-        userName = homescreenManager.Name.text;
-
-        _databaseReference.Child("users").GetValueAsync().ContinueWithOnMainThread(task =>
-        {
-            if (task.IsCompleted)
-            {
-                User newUser = new User(userName);
-                string userJson = JsonUtility.ToJson(newUser);
-
-                Dictionary<string, object> userData = new Dictionary<string, object>
-                    {
-                        { "bestTime", "" },
-                        { "deathPositions", "" }
-                    };
-
-                _databaseReference.Child("users").Child(userName).Child("data").SetValueAsync(userData).ContinueWithOnMainThread(setTask =>
-                {
-                    if (setTask.IsCompleted)
-                    {
-                        Debug.Log("User created successfully.");
-                        SceneManager.LoadScene("SampleScene");
-                    }
-                    else
-                    {
-                        Debug.LogError("Error creating user: " + setTask.Exception);
-                    }
-                });
-            }
-            else
-            {
-                Debug.LogError("Error checking user existence: " + task.Exception);
             }
         });
     }

@@ -43,7 +43,7 @@ public class HomescreenManager : MonoBehaviour
 
         if (userName != "")
         {
-            SceneManager.LoadScene("SampleScene");
+            SceneManager.LoadScene("Level");
         }
         else
         {

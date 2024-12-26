@@ -113,9 +113,6 @@ public class FirstPersonMovement : MonoBehaviour
         if (isGrounded && Input.GetButtonDown("Jump"))
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            // Debug.Log(jumpAmount);
-
-            // FirebaseManager.Instance.SaveData("jumpAmount", jumpAmount);
         }
     }
 
@@ -165,13 +162,14 @@ public class FirstPersonMovement : MonoBehaviour
     {
         gameObject.transform.position = new Vector3(spawnpoint.position.x, spawnpoint.position.y + 2f, spawnpoint.position.z);
     }
-    
+
     /** 
      * Displays the score UI and saves game data.
      * Inputs: None
      * Actions: Activates the score UI, updates score text, and saves data via the DatabaseManager.
      * Outputs: None
-     */    public void ShowScore()
+     */    
+    public void ShowScore()
     {
         score.SetActive(true);
         scoreTime.text = stopwatch.time.ToString();

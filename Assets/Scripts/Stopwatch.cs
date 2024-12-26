@@ -7,7 +7,6 @@ using TMPro;
 
 public class Stopwatch : MonoBehaviour
 {
-
     [SerializeField] private TextMeshProUGUI timerText;
     private float currentTime;
     private bool isPaused;
@@ -50,8 +49,6 @@ public class Stopwatch : MonoBehaviour
     public void StopTimer()
     {
         isPaused = true;
-        // Debug.Log(time);
-        // FirebaseManager.Instance.SaveData("time", time.ToString());
     }
 
     /**
