@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class DeathPositionManager : MonoBehaviour
 {
-    [SerializeField] private GameObject deathPinPrefab; // Prefab for the death position pin
-    [SerializeField] private Transform pinParent; // Parent object for organizational purposes
+    [SerializeField] private GameObject deathPinPrefab;
 
     void Start()
     {
@@ -22,9 +21,8 @@ public class DeathPositionManager : MonoBehaviour
     {
         foreach (string positionString in deathPositions)
         {
-            Debug.Log("pin spawned");
             Vector3 position = ParsePositionString(positionString);
-            if (position != Vector3.zero) // Ensure parsing was successful
+            if (position != Vector3.zero)
             {
                 Instantiate(deathPinPrefab, position, Quaternion.identity);
             }
@@ -41,9 +39,7 @@ public class DeathPositionManager : MonoBehaviour
     {
         try
         {
-            // Remove parentheses and spaces, then split by commas
             string cleanedString = positionString.Trim('(', ')');
-            Debug.Log(cleanedString);
             string[] coordinates = cleanedString.Split(',');
 
             if (coordinates.Length == 3)
