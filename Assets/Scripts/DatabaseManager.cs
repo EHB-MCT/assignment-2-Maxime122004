@@ -17,6 +17,7 @@ public class DatabaseManager : MonoBehaviour
     private string scoreboardName;
 
     public HomescreenManager homescreenManager;
+    public DeathPositionManager deathPositionManager;
 
     /**
      * Ensures only one instance of the DatabaseManager exists and persists across scenes.
@@ -82,6 +83,11 @@ public class DatabaseManager : MonoBehaviour
         if (scene.name == "HomeScreen")
         {
             homescreenManager = FindAnyObjectByType<HomescreenManager>();
+        }
+        else if (scene.name == "Level")
+        {
+            deathPositionManager = FindAnyObjectByType<DeathPositionManager>();
+
         }
     }
 
@@ -310,6 +316,59 @@ public class DatabaseManager : MonoBehaviour
             else
             {
                 Debug.LogError($"Error retrieving data for this user: {task.Exception}");
+            }
+        });
+    }
+
+    // public void GetUserDeaths()
+    // {
+    //     userName = homescreenManager.Name.text;
+    //     _databaseReference.Child("users").Child(userName).Child("data").Child("deathPositions").GetValueAsync().ContinueWithOnMainThread(task =>{
+    //         if (task.IsCompleted)
+    //         {
+    //             DataSnapshot snapshot = task.Result;
+
+    //             if (snapshot.Exists && snapshot.Value != null)
+    //             {
+    //                 Debug.Log(snapshot);
+    //             }
+    //         }
+    //         else
+    //         {
+    //             Debug.LogError($"Error retrieving data: {task.Exception}");
+    //         }
+    //     });
+    // }
+
+    /**
+     * Fetches death positions from the database for the given player and spawns pins.
+     * Input: Player ID.
+     * Action: Retrieves death positions and spawns pins using the DeathPositionManager.
+     * Output: None.
+     */
+    public void FetchAndShowDeathPositions()
+    {
+        userName = homescreenManager.Name.text;
+        string path = $"players/{userName}/deathPositions";
+
+        _databaseReference.Child("users").Child(userName).Child("data").Child("deathPositions").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted && task.Result.Exists)
+            {
+                List<string> deathPositions = new List<string>();
+                Debug.Log(task.Result);
+                foreach (var item in task.Result.Children)
+                {
+                    string positionString = item.Value.ToString();
+                    deathPositions.Add(positionString);
+                }
+
+                // Call the DeathPositionManager to spawn pins
+                deathPositionManager.SpawnDeathPins(deathPositions);
+            }
+            else
+            {
+                Debug.LogWarning($"No death positions found for player: {userName}");
             }
         });
     }
